@@ -1,5 +1,7 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { EpisodesService } from './episodes.service';
+import { CreateEpisodeDto } from './dto/create-episode.dto';
+import { UpdateEpisodeDto } from './dto/update-episode.dto';
 
 @Controller('episodes')
 export class EpisodesController {
@@ -20,5 +22,15 @@ export class EpisodesController {
     return this.episodesService.findOne(id);
     // console.log('findOne', id);
     // return `Episode ${id}`;
+  }
+
+  @Post()
+  create(@Body() createEpisodeDto: CreateEpisodeDto) {
+    return this.episodesService.create(createEpisodeDto);
+  }
+
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateEpisodeDto: UpdateEpisodeDto) {
+    return this.episodesService.update(id, updateEpisodeDto);
   }
 }

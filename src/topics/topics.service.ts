@@ -9,30 +9,30 @@ import { Repository } from 'typeorm';
 export class TopicsService {
   constructor(
     @InjectRepository(TopicEntity)
-    private readonly topicRepository: Repository<TopicEntity>,
+    private readonly topicRepo: Repository<TopicEntity>,
   ) {}
 
   findAll() {
     // return 'This action returns all topics';
-    return this.topicRepository.find();
+    return this.topicRepo.find();
   }
 
   findOne(id: string) {
     // return `This action returns topic with id ${id}`;
-    return this.topicRepository.findOne({ where: { id } });
+    return this.topicRepo.findOne({ where: { id } });
   }
 
   create(createTopicDto: CreateTopicDto) {
     // return `This action adds a new topic: ${JSON.stringify(createTopicDto)}`;
-    const topic = this.topicRepository.create(createTopicDto);
-    return this.topicRepository.save(topic);
+    const topic = this.topicRepo.create(createTopicDto);
+    return this.topicRepo.save(topic);
   }
 
   // update(id: string, updateTopicDto: UpdateTopicDto) {
   //   return `This action updates topic ${id} with data: ${JSON.stringify(updateTopicDto)}`;
   // }
   async update(id: string, updateTopicDto: UpdateTopicDto) {
-    await this.topicRepository.update(id, updateTopicDto);
+    await this.topicRepo.update(id, updateTopicDto);
     return this.findOne(id);
   }
 
@@ -42,7 +42,7 @@ export class TopicsService {
   async remove(id: string) {
     const topic = await this.findOne(id);
     if (!topic) return null;
-    await this.topicRepository.delete(id);
+    await this.topicRepo.delete(id);
     return topic;
   }
 }

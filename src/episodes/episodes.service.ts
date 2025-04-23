@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEpisodeDto } from './dto/create-episode.dto';
 import { UpdateEpisodeDto } from './dto/update-episode.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EpisodeEntity } from './entities/episode.entity';
 import { Repository } from 'typeorm';
+import { EpisodeEntity } from './entities/episode.entity';
 import { TopicEntity } from 'src/topics/entities/topic.entity';
 
 @Injectable()
@@ -12,13 +12,13 @@ export class EpisodesService {
     @InjectRepository(EpisodeEntity)
     private readonly episodeRepo: Repository<EpisodeEntity>,
 
-    // @InjectRepository(TopicEntity)
-    // private readonly topicRepo: Repository<TopicEntity>,
+    @InjectRepository(TopicEntity)
+    private readonly topicRepo: Repository<TopicEntity>,
   ) {}
 
   findAll() {
     // return 'All Episodes';
-    return this.episodeRepo.find();
+    return this.episodeRepo.find(); // returns episodes with topic (eager)
   }
 
   findFeatured() {
@@ -31,18 +31,32 @@ export class EpisodesService {
     return this.episodeRepo.findOne({ where: { id } });
   }
 
-  create(createEpisodeDto: CreateEpisodeDto) {
-    // return `This action adds a new episode: ${JSON.stringify(createEpisodeDto)}`;
-    const episode = this.episodeRepo.create(createEpisodeDto);
+  async create(dto: CreateEpisodeDto) {
+    const topic = await this.topicRepo.findOne({ where: { id: dto.topicId } });
+    if (!topic) throw new NotFoundException('Topic not found');
+
+    const episode = this.episodeRepo.create({
+      ...dto,
+      topic,
+    });
+
     return this.episodeRepo.save(episode);
   }
 
-  // update(id: string, updateEpisodeDto: UpdateEpisodeDto) {
-  //   return `This action updates episode ${id} with data: ${JSON.stringify(updateEpisodeDto)}`;
-  // }
-  async update(id: string, updateEpisodeDto: UpdateEpisodeDto) {
-    await this.episodeRepo.update(id, updateEpisodeDto);
-    return this.findOne(id);
+  async update(id: string, dto: UpdateEpisodeDto) {
+    const episode = await this.findOne(id);
+    if (!episode) throw new NotFoundException('Episode not found');
+
+    if (dto.topicId) {
+      const topic = await this.topicRepo.findOne({
+        where: { id: dto.topicId },
+      });
+      if (!topic) throw new NotFoundException('Topic not found');
+      episode.topic = topic;
+    }
+
+    Object.assign(episode, dto);
+    return this.episodeRepo.save(episode);
   }
 
   // remove(id: string) {

@@ -15,6 +15,6 @@ export class EpisodeEntity {
   @Column({ default: false })
   published: boolean;
 
-  // @ManyToOne(() => TopicEntity, (topic) => topic.episodes, { eager: true })
-  // topic: TopicEntity;
+  @ManyToOne(() => TopicEntity, (topic) => topic.episodes, { eager: true })
+  topic: TopicEntity;
 }

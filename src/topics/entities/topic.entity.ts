@@ -12,6 +12,6 @@ export class TopicEntity {
   @Column()
   description: string;
 
-  // @OneToMany(() => EpisodeEntity, (episode) => episode.topic)
-  // episodes: EpisodeEntity[];
+  @OneToMany(() => EpisodeEntity, (episode) => episode.topic)
+  episodes: EpisodeEntity[];
 }

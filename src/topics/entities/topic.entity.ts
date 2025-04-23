@@ -1,4 +1,4 @@
-import { EpisodeEntity } from 'src/episodes/entities/episode.entity';
+import { EpisodeEntity } from '../../episodes/entities/episode.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity()

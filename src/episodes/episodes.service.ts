@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateEpisodeDto } from './dto/create-episode.dto';
-import { UpdateEpisodeDto } from './dto/update-episode.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { EpisodeEntity } from './entities/episode.entity';
-import { TopicEntity } from 'src/topics/entities/topic.entity';
+import { CreateEpisodeDto } from './dto/create-episode.dto';
+import { UpdateEpisodeDto } from './dto/update-episode.dto';
+import { TopicEntity } from '../topics/entities/topic.entity';
 
 @Injectable()
 export class EpisodesService {
@@ -59,9 +59,6 @@ export class EpisodesService {
     return this.episodeRepo.save(episode);
   }
 
-  // remove(id: string) {
-  //   return `This action removes episode with id ${id}`;
-  // }
   async remove(id: string) {
     const episode = await this.findOne(id);
     if (!episode) return null;

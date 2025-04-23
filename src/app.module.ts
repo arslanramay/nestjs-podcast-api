@@ -5,6 +5,8 @@ import { AppService } from './app.service';
 import { EpisodesModule } from './episodes/episodes.module';
 import { TopicsModule } from './topics/topics.module';
 import { ConfigModule } from './config/config.module';
+import { EpisodeEntity } from './episodes/entities/episode.entity';
+import { TopicEntity } from './topics/entities/topic.entity';
 
 @Module({
   imports: [
@@ -15,10 +17,10 @@ import { ConfigModule } from './config/config.module';
       type: 'postgres',
       host: 'localhost',
       port: 5432,
-      username: 'postgres', // 👈 your db user
-      password: 'password', // 👈 your db password
-      database: 'podcastdb', // 👈 your db name
-      entities: [Episode, Topic],
+      username: 'pgadmin', // 👈 your db user
+      password: '123456789', // 👈 your db password
+      database: 'podcastapidb', // 👈 your db name
+      entities: [EpisodeEntity, TopicEntity],
       synchronize: true, // 👈 auto create tables (dev only)
     }),
   ],

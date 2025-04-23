@@ -1,4 +1,4 @@
-import { Get, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '../config/config.module';
 import { EpisodesController } from './episodes.controller';
 import { EpisodesService } from './episodes.service';

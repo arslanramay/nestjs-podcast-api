@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Podcast Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 text-gray-900 min-h-screen p-8">
+
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6">🎙 Podcast Admin Panel</h1>
+
+        <!-- Create Episode -->
+        <div class="bg-white p-6 rounded shadow mb-8">
+            <h2 class="text-xl font-bold mb-4">Add Episode</h2>
+            <form id="episodeForm" class="space-y-4">
+                <input type="text" id="title" placeholder="Episode Title" class="w-full p-2 border rounded" required>
+                <input type="text" id="description" placeholder="Description" class="w-full p-2 border rounded"
+                    required>
+                <select id="published" class="w-full p-2 border rounded">
+                    <option value="true">Published</option>
+                    <option value="false">Draft</option>
+                </select>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Create
+                    Episode</button>
+            </form>
+        </div>
+
+        <!-- Episodes List -->
+        <div class="bg-white p-6 rounded shadow mb-8">
+            <h2 class="text-xl font-bold mb-4">Episodes</h2>
+            <div id="episodesList" class="space-y-2"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/episodes';
+
+        async function fetchEpisodes() {
+            const res = await fetch(API_URL);
+            const episodes = await res.json();
+            const episodesList = document.getElementById('episodesList');
+            episodesList.innerHTML = '';
+            episodes.forEach(ep => {
+                const div = document.createElement('div');
+                div.className = "border p-4 rounded flex justify-between items-center";
+                div.innerHTML = `
+      <div>
+        <h3 class="text-lg font-bold">${ep.title}</h3>
+        <p>${ep.description}</p>
+        <p class="text-sm text-gray-600">${ep.published ? '✅ Published' : '📝 Draft'}</p>
+      </div>
+      <button onclick="deleteEpisode('${ep.id}')" class="text-red-500">Delete</button>
+    `;
+                episodesList.appendChild(div);
+            });
+        }
+
+        async function deleteEpisode(id) {
+            await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+            fetchEpisodes();
+        }
+
+        document.getElementById('episodeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const published = document.getElementById('published').value === 'true';
+            await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, description, published })
+            });
+            fetchEpisodes();
+            e.target.reset();
+        });
+
+        fetchEpisodes();
+    </script>
+
+</body>
+
+</html>

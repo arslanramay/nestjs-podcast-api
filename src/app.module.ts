@@ -12,18 +12,18 @@ import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     ConfigModule,
-    EpisodesModule,
-    TopicsModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: process.env.DB_HOST || 'localhost',
       port: 5432,
-      username: 'pgadmin', // 👈 your db user
-      password: '123456789', // 👈 your db password
-      database: 'podcastapidb', // 👈 your db name
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
       entities: [EpisodeEntity, TopicEntity],
-      synchronize: true, // 👈 auto create tables (dev only)
+      synchronize: true, // auto create tables (dev only)
     }),
+    EpisodesModule,
+    TopicsModule,
     AuthModule,
   ],
   controllers: [AppController],

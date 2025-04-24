@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Query,
+  Request,
 } from '@nestjs/common';
 import { EpisodesService } from './episodes.service';
 import { CreateEpisodeDto } from './dto/create-episode.dto';
@@ -20,9 +21,15 @@ export class EpisodesController {
 
   @UseGuards(JwtAuthGuard)
   @Get('protected')
-  getProtected() {
-    return 'You are authenticated and viewing protected episodes!';
+  getProtected(@Request() req) {
+    return {
+      message: 'Protected content accessed!',
+      user: req.user,
+    };
   }
+  // getProtected() {
+  //   return 'You are authenticated and viewing protected episodes!';
+  // }
 
   @Get()
   findAll(@Query('topicId') topicId?: string) {

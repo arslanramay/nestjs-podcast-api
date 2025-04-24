@@ -1,4 +1,4 @@
-import { TopicEntity } from 'src/topics/entities/topic.entity';
+import { TopicEntity } from '../../topics/entities/topic.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
 @Entity()

@@ -11,10 +11,18 @@ import {
 import { EpisodesService } from './episodes.service';
 import { CreateEpisodeDto } from './dto/create-episode.dto';
 import { UpdateEpisodeDto } from './dto/update-episode.dto';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 @Controller('episodes')
 export class EpisodesController {
   constructor(private readonly episodesService: EpisodesService) {}
+
+  @UseGuards(JwtAuthGuard)
+  @Get('protected')
+  getProtected() {
+    return 'You are authenticated and viewing protected episodes!';
+  }
 
   @Get()
   findAll(@Query('topicId') topicId?: string) {

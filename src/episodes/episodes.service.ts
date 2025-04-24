@@ -16,13 +16,19 @@ export class EpisodesService {
     private readonly topicRepo: Repository<TopicEntity>,
   ) {}
 
-  findAll() {
-    // return 'All Episodes';
-    return this.episodeRepo.find(); // returns episodes with topic (eager)
+  findAll(topicId?: string) {
+    if (topicId) {
+      return this.episodeRepo.find({
+        where: { topic: { id: topicId } },
+        relations: ['topic'],
+      });
+    }
+    return this.episodeRepo.find({ relations: ['topic'] });
+    // return this.episodeRepo.find();
+    // return this.episodeRepo.find({ where: { published: true } });
   }
 
   findFeatured() {
-    // return 'All Featured Episodes';
     return this.episodeRepo.find({ where: { published: true } });
   }
 

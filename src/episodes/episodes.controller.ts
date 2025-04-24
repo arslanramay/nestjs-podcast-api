@@ -17,8 +17,8 @@ export class EpisodesController {
   constructor(private readonly episodesService: EpisodesService) {}
 
   @Get()
-  findAll() {
-    return this.episodesService.findAll();
+  findAll(@Query('topicId') topicId?: string) {
+    return this.episodesService.findAll(topicId);
   }
 
   @Get('featured')

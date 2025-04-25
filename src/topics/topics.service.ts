@@ -13,7 +13,6 @@ export class TopicsService {
   ) {}
 
   findAll() {
-    // return 'This action returns all topics';
     return this.topicRepo.find();
   }
 
